@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+</head>
+
+<body>
+    <p>Task 4: Idle resources are:</p>
+    <div id="output"></div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+        let arr = [];
+        for (let i = 0; i < 75; i++) {
+            arr.push(i + 1);
+        }
+        console.log(arr);
+
+        // $.ajax({
+        //     type: 'GET',
+        //     url: './Resource_Mapping_Data.json',
+        //     data: 'data',
+        //     dataType: 'JSON',
+        //     success: function(response) {
+        //         let array = [];
+
+        //         for (let i = 1; i <= Object.keys(response).length; i++) {
+        //             myArr = response[i];
+        //             let difference = arr.filter((x) => !myArr.includes(x));
+        //             arr = difference;
+        //         }
+
+        //         console.log(arr);
+        //     },
+        // });
+
+        var return_first = (function() {
+            var tmp = null;
+            $.ajax({
+                async: false,
+                type: 'GET',
+                url: './Resource_Mapping_Data.json',
+                data: 'data',
+                dataType: 'JSON',
+                success: function(response) {
+                    let array = [];
+
+                    for (let i = 1; i <= Object.keys(response).length; i++) {
+                        myArr = response[i];
+                        let difference = arr.filter((x) => !myArr.includes(x));
+                        arr = difference;
+                    }
+
+                    tmp = arr;
+                },
+            });
+            return tmp;
+        })();
+
+        console.log(return_first);
+
+        $.ajax({
+            type: 'GET',
+            url: './Resource_List_Data.json',
+            data: 'data',
+            dataType: 'json',
+            success: function(response) {
+                let html = '';
+                for (let i = 0; i < return_first.length; i++) {
+                    html += JSON.stringify(response[return_first[i]]);
+                }
+                // console.log(JSON.stringify(response[3]));
+                $('#output').text(html);
+            },
+        });
+
+        // console.log('Missing Type ' + missingResourceType);
+    </script>
+</body>
+
+</html>
